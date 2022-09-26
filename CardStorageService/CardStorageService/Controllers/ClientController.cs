@@ -1,17 +1,12 @@
 ﻿using CardStorageService.Data;
-using CardStorageService.Models;
 using CardStorageService.Models.Requests;
 using CardStorageService.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using CardStorageService.Services.Impl;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace CardStorageService.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
