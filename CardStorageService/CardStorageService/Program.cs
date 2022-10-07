@@ -23,6 +23,21 @@ namespace CardStorageService
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+            #region Configure gRPC
+
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Listen(IPAddress.Any, 5001, listenOptions =>
+                {
+                    listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
+                });
+            });
+
+            builder.Services.AddGrpc();
+
+            #endregion
             #region Configure FluentValidator
 
             builder.Services.AddScoped<IValidator<AuthenticationRequest>, AuthenticationRequestValidator>();
@@ -160,7 +175,14 @@ namespace CardStorageService
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseHttpLogging();
+//            app.UseHttpLogging();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<ClientService>();
+                endpoints.MapGrpcService<CardService>();
+
+            });
 
             app.MapControllers();
 
